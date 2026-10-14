@@ -4,7 +4,7 @@ import { resolve, relative, join, sep } from "node:path";
 
 const root = resolve("out");
 assert(existsSync(root), "Run npm run build before checking the export.");
-const site = new URL((process.env.NEXT_PUBLIC_SITE_URL || "https://mk-aify.github.io/ecobiocides-web").replace(/\/+$/, "") + "/");
+const site = new URL((process.env.NEXT_PUBLIC_SITE_URL || "https://hyfib.github.io/ecobiocides-web").replace(/\/+$/, "") + "/");
 const basePath = "/ecobiocides-web";
 const htmlFiles = [];
 function walk(dir) {

@@ -45,7 +45,7 @@ Do not publish composition, dosage, pack sizes or certification claims for these
 products until approved technical documentation and product photographs arrive.
 
 Canonical URLs and the generated sitemap default to
-`https://mk-aify.github.io/ecobiocides-web/`. Set `NEXT_PUBLIC_SITE_URL` at build
+`https://hyfib.github.io/ecobiocides-web/`. Set `NEXT_PUBLIC_SITE_URL` at build
 time if the public deployment URL changes. A root/custom-domain deployment also
 requires updating the `basePath` and `assetPrefix` in `next.config.ts` and the
 base-path assertion in `scripts/check-export.mjs`.
