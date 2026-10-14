@@ -11,7 +11,7 @@ export default function AboutPreview() {
   return (
     <section id="about" className="relative overflow-hidden bg-[#f4f0e6]">
       <div className="relative">
-        <div className="relative flex min-h-[30rem] items-center py-16 sm:min-h-[32rem] lg:min-h-[34rem]">
+        <div className="relative flex items-center py-14 sm:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid items-center gap-8 lg:grid-cols-2">
               <motion.div
@@ -43,7 +43,7 @@ export default function AboutPreview() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="hidden lg:grid grid-cols-2 gap-3"
+                className="grid grid-cols-2 gap-3"
               >
                 {[
                   { value: `${COMPANY.experience}+`, label: "Years" },

@@ -1,9 +1,7 @@
 import Hero from "@/components/sections/Hero";
 import TrustBadges from "@/components/sections/TrustBadges";
-import AzagroRange from "@/components/sections/AzagroRange";
-import SpecialtyPortfolio from "@/components/sections/SpecialtyPortfolio";
-import EnvironmentalStory from "@/components/sections/EnvironmentalStory";
-import TechnologyScience from "@/components/sections/TechnologyScience";
+import ProductShowcase from "@/components/sections/ProductShowcase";
+import IndustriesPreview from "@/components/sections/IndustriesPreview";
 import AboutPreview from "@/components/sections/AboutPreview";
 import CertificationsPreview from "@/components/sections/CertificationsPreview";
 import ProductDirectory from "@/components/sections/ProductDirectory";
@@ -14,11 +12,9 @@ export default function Home() {
     <main>
       <Hero />
       <TrustBadges />
+      <ProductShowcase />
       <ProductDirectory />
-      <AzagroRange />
-      <SpecialtyPortfolio />
-      <EnvironmentalStory />
-      <TechnologyScience />
+      <IndustriesPreview />
       <AboutPreview />
       <CertificationsPreview />
       <Contact />

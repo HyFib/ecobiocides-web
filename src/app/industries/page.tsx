@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Flower2, Globe, Leaf, Pill, TreePine, Wheat } from "lucide-react";
 import Manufacturing from "@/components/sections/Manufacturing";
-import PageBanner from "@/components/ui/PageBanner";
+import IndustriesHero from "@/components/sections/IndustriesHero";
 import { INDUSTRIES } from "@/lib/constants";
 import { mediaUrl } from "@/lib/media";
 
@@ -30,16 +30,11 @@ const iconMap: Record<string, React.ElementType> = {
 export default function IndustriesPage() {
   return (
     <main>
-      <PageBanner
-        badge="Manufacturing & industries"
-        title="Neem expertise, from processing to people."
-        subtitle="Integrated neem manufacturing, research and a skilled workforce supporting agricultural and horticultural customers in India and international markets."
-        highlights={["Agriculture", "Botanical formulation", "Bulk and export supply"]}
-      />
+      <IndustriesHero />
 
       <Manufacturing />
 
-      <section className="bg-white py-20 sm:py-24 lg:py-28">
+      <section id="sectors" className="scroll-mt-24 bg-white py-20 sm:py-24 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
             <div>

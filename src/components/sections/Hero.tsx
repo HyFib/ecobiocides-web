@@ -2,102 +2,35 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, MessageCircle, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { COMPANY } from "@/lib/constants";
 import { mediaUrl } from "@/lib/media";
 
 export default function Hero() {
-  const whatsappUrl = `https://wa.me/${COMPANY.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello! I would like to discuss Ecobiocides botanical crop-protection solutions.")}`;
-
   return (
-    <section id="home" className="relative isolate min-h-[780px] overflow-hidden bg-slate-950 text-white lg:min-h-screen">
-      <Image
-        src={mediaUrl("/media/story/regenerative-farm.webp")}
-        alt="Regenerative farm landscape"
-        fill
-        className="object-cover object-center"
-        sizes="100vw"
-        priority
-        loading="eager"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,.96)_0%,rgba(15,23,42,.88)_42%,rgba(15,23,42,.38)_72%,rgba(15,23,42,.42)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(15,23,42,.92)_0%,transparent_38%,rgba(15,23,42,.28)_100%)]" />
-      <div className="absolute -left-40 top-1/3 h-96 w-96 rounded-full bg-amber-300/15 blur-3xl" />
-
-      <div className="relative mx-auto grid min-h-[780px] max-w-7xl items-center gap-12 px-4 pb-16 pt-32 sm:px-6 md:pt-36 lg:min-h-screen lg:grid-cols-[1.02fr_.98fr] lg:px-8 lg:pb-20 lg:pt-32">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="max-w-2xl"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-200/25 bg-amber-100/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-amber-200 backdrop-blur-md">
-            <Sparkles className="h-4 w-4" />
-            Botanical intelligence since {COMPANY.founded}
+    <section id="home" className="overflow-hidden bg-[#faf8f3] pb-12 pt-32 sm:pb-16 sm:pt-36 lg:pt-40">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:gap-12 lg:px-8">
+        <div>
+          <p className="eyebrow flex items-center gap-3 text-slate-600"><span className="h-px w-8 bg-[#bfa987]" />Botanical intelligence since {COMPANY.founded}</p>
+          <h1 className="mt-6 font-display text-5xl font-bold leading-[1.04] tracking-[-0.045em] text-slate-950 sm:text-6xl lg:text-[4.2rem]">Better crops.<br />Healthier soil.<br /><span className="text-[#8b7350]">From nature.</span></h1>
+          <p className="mt-6 max-w-lg text-lg leading-8 text-slate-600">Neem-based crop protection, soil enrichment and botanical inputs. Rooted in Theni. Made for modern agriculture.</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/#azagro-range" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-slate-700">Explore our products<ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
+            <Link href="/industries/" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-stone-300 px-6 py-3.5 text-sm font-bold text-slate-800 hover:bg-white">Inside our factory<ArrowUpRight aria-hidden="true" className="h-4 w-4" /></Link>
           </div>
-
-          <h1 className="mt-7 font-display text-5xl font-extrabold leading-[0.98] tracking-[-0.045em] sm:text-6xl lg:text-7xl xl:text-[5.3rem]">
-            Botanical crop protection,
-            <span className="mt-2 block text-amber-300">made precise.</span>
-          </h1>
-
-          <p className="mt-7 max-w-xl text-lg leading-8 text-white/75 sm:text-xl">
-            Neem-based crop protection, soil enrichment and botanical inputs engineered for modern agriculture—from 300 to 50,000 PPM.
-          </p>
-
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="/#azagro-range" className="group inline-flex items-center justify-center gap-2 rounded-full bg-amber-300 px-7 py-4 text-sm font-extrabold text-slate-950 shadow-xl shadow-black/20 transition-all hover:bg-amber-200">
-              Explore the range
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-7 py-4 text-sm font-bold text-white backdrop-blur-md transition-all hover:bg-white/15">
-              <MessageCircle className="h-4 w-4 text-[#59e391]" />
-              Talk to our team
-            </a>
+          <div className="mt-9 flex items-start gap-8 border-t border-stone-200 pt-6"><div><p className="text-3xl font-bold tracking-tight text-slate-900">{COMPANY.experience}+</p><p className="mt-1 text-xs text-slate-500">Years of neem expertise</p></div><div><p className="text-3xl font-bold tracking-tight text-slate-900">300–50,000</p><p className="mt-1 text-xs text-slate-500">PPM Azagro formulations</p></div></div>
+        </div>
+        <div className="relative">
+          <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-stone-200 sm:aspect-[6/5]">
+            <Image src={mediaUrl("/media/story/indian-farmer.webp")} alt="Farmer tending fields at sunrise" fill priority loading="eager" className="object-cover object-[35%_center]" sizes="(max-width: 1024px) 100vw, 50vw" />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950/75 to-transparent" />
+            <div className="absolute bottom-7 left-7 right-7 text-white"><p className="eyebrow text-white/70">From nature. For your fields.</p><p className="mt-2 max-w-xs text-2xl font-semibold leading-8">Care that begins<br />with the neem tree.</p></div>
           </div>
-
-          <div className="mt-10 grid max-w-xl grid-cols-2 gap-x-5 gap-y-3 border-t border-white/15 pt-7 sm:grid-cols-3">
-            {["Neem-based formulations", "Integrated pest management", "Bulk & export supply"].map((item) => (
-              <div key={item} className="flex items-start gap-2 text-xs font-semibold leading-5 text-white/70">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
-                {item}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, x: 30, scale: 0.96 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="relative mx-auto w-full max-w-[570px] lg:mx-0 lg:ml-auto"
-        >
-          <div className="absolute -inset-8 rounded-full bg-amber-300/10 blur-3xl" />
-          <div className="relative overflow-hidden rounded-[2.4rem] border border-white/20 bg-white/95 p-3 shadow-2xl shadow-black/35 sm:p-5">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.8rem] bg-gradient-to-br from-[#faf8f5] to-[#e8e4dc]">
-              <Image
-                src={mediaUrl("/media/products/azagro-3000-bottle.webp")}
-                alt="Azagro 3000 PPM neem-based botanical pesticide bottle"
-                fill
-                className="object-contain p-3 sm:p-5"
-                sizes="(max-width: 1024px) 90vw, 45vw"
-                priority
-                loading="eager"
-                fetchPriority="high"
-              />
-            </div>
-          </div>
-
-          <div className="absolute -left-3 top-12 rounded-2xl border border-white/20 bg-slate-950/85 px-4 py-3 shadow-xl backdrop-blur-xl sm:-left-10 sm:px-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300">Full spectrum</p>
-            <p className="mt-1 text-lg font-extrabold">300–50,000 PPM</p>
-          </div>
-          <div className="absolute -bottom-4 right-2 rounded-2xl border border-white/50 bg-white px-5 py-4 text-slate-950 shadow-2xl sm:-right-8 sm:bottom-8">
-            <p className="text-2xl font-extrabold">{COMPANY.experience}+ years</p>
-            <p className="text-xs font-semibold text-slate-600">of neem expertise</p>
-          </div>
-        </motion.div>
+          <Link href="/products/azagro-3000-ppm/" className="group absolute right-3 top-5 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/95 p-3 shadow-lg sm:-right-3 sm:top-7">
+            <Image src={mediaUrl("/media/products/azagro-3000-bottle.webp")} alt="" width={44} height={60} className="h-16 w-12 object-contain" />
+            <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Meet Azagro</p><p className="mt-1 text-sm font-bold text-slate-900">Botanical crop protection</p><p className="mt-1 flex items-center gap-2 text-xs text-slate-600">Explore the range<ArrowUpRight aria-hidden="true" className="h-3 w-3" /></p></div>
+          </Link>
+        </div>
       </div>
     </section>
   );

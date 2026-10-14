@@ -1,96 +1,22 @@
-"use client";
-
-import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  Wheat,
-  Leaf,
-  TreePine,
-  Flower2,
-  Pill,
-  Globe,
-  ArrowRight,
-} from "lucide-react";
-import { INDUSTRIES } from "@/lib/constants";
-import SectionHeading from "@/components/ui/SectionHeading";
+import { ArrowRight } from "lucide-react";
+import { mediaUrl } from "@/lib/media";
 
-const iconMap: Record<string, React.ElementType> = {
-  wheat: Wheat,
-  leaf: Leaf,
-  trees: TreePine,
-  flower2: Flower2,
-  pill: Pill,
-  globe: Globe,
-};
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const sectors = [
+  { title: "Agriculture & horticulture", image: "/media/story/indian-farmer.webp", alt: "Farmer tending cultivated fields", copy: "Botanical crop care, from the first planting to harvest." },
+  { title: "Formulation & manufacturing", image: "/media/factory/processing-tanks.webp", alt: "Original Ecobiocides stainless steel processing vessels", copy: "Neem expertise and controlled processing for specialist inputs." },
+  { title: "Bulk & export partners", image: "/media/factory/factory-aerial-yard.webp", alt: "Original aerial view of Ecobiocides production and storage areas", copy: "Technical guidance and supply for India and international markets." },
+] as const;
 
 export default function IndustriesPreview() {
   return (
-    <section
-      id="industries"
-      className="section-padding relative bg-gray-50/50 overflow-hidden"
-    >
-      {/* Field background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-[0.07]"
-          style={{
-            backgroundImage: `url('${basePath}/images/industries-banner.svg')`,
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/80 via-gray-50/60 to-gray-50/90" />
-        <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-eco-100/20 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-eco-50/30 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Industries We Serve"
-          title="Trusted Across Sectors"
-          subtitle="From organic farms to large plantation estates — our bio solutions protect crops worldwide."
-        />
-
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-          {INDUSTRIES.map((industry, index) => {
-            const Icon = iconMap[industry.icon] || Leaf;
-
-            return (
-              <motion.div
-                key={industry.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
-                whileHover={{ y: -4 }}
-                className="group flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition-all duration-300 hover:border-eco-200 hover:shadow-lg"
-              >
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-eco-50 text-eco-600 transition-all duration-300 group-hover:bg-eco-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-eco-600/30">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-sm font-semibold text-gray-900 leading-tight">
-                  {industry.title}
-                </h3>
-              </motion.div>
-            );
-          })}
+    <section id="industries" className="bg-[#f4f0e6] py-14 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-5"><div><p className="eyebrow text-slate-500">Where nature makes a difference</p><h2 className="mt-3 max-w-2xl font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Rooted in agriculture.<br />Ready for your industry.</h2></div><Link href="/industries/" className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-slate-900">Explore our industries<ArrowRight aria-hidden="true" className="h-4 w-4" /></Link></div>
+        <div className="mt-9 grid gap-5 md:grid-cols-3">
+          {sectors.map((sector) => <Link key={sector.title} href="/industries/" className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-lg"><div className="relative aspect-[3/2] overflow-hidden"><Image src={mediaUrl(sector.image)} alt={sector.alt} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.025]" /></div><div className="p-5 sm:p-6"><h3 className="flex items-center justify-between gap-3 text-lg font-bold text-slate-900">{sector.title}<ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0" /></h3><p className="mt-3 text-sm leading-6 text-slate-600">{sector.copy}</p></div></Link>)}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mt-10 text-center"
-        >
-          <Link
-            href="/industries"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-eco-600 transition-all hover:text-eco-700 hover:gap-3"
-          >
-            See All Industries
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </motion.div>
       </div>
     </section>
   );
