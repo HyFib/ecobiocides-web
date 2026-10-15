@@ -2,7 +2,7 @@ import { siteUrl } from "@/lib/site";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import CatalogProductCard from "@/components/ui/CatalogProductCard";
+import ProductShowcase from "@/components/sections/ProductShowcase";
 import SpecialtyPortfolio from "@/components/sections/SpecialtyPortfolio";
 import ProductDirectory from "@/components/sections/ProductDirectory";
 import { CURRENT_PRODUCTS, PRODUCT_CATEGORIES, getProduct, productHref } from "@/lib/products";
@@ -30,15 +30,18 @@ export default function ProductsPage() {
         </div>
       </section>
       <ProductDirectory />
-      <section id="azagro-ec" className="scroll-mt-24 bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-widest text-slate-600">Azadirachtin-based formulations</p>
-          <h2 className="mt-3 font-display text-4xl font-extrabold text-slate-950">Azagro EC</h2>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">Five concentrations: 300, 1,500, 3,000, 30,000 and 50,000 ppm. Each product has its own details and downloadable technical sheet.</p>
-          <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{azagroProducts.map((product) => <CatalogProductCard key={product.slug} product={product} />)}</div>
-          <p className="mt-8 rounded-2xl bg-stone-50 p-5 text-base leading-7 text-slate-950">Looking for Azagro 10,000 ppm? <Link href={productHref(additionalProduct)} className="font-bold underline underline-offset-4">View its product information and technical sheet.</Link></p>
+      <ProductShowcase
+        products={azagroProducts}
+        id="azagro-ec"
+        title="Azagro EC"
+        description="Five concentrations: 300, 1,500, 3,000, 30,000 and 50,000 ppm. Each product has its own details and downloadable technical sheet."
+        showAllProductsLink={false}
+      />
+      <div className="bg-[#f5f4f1] pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
+          <p className="rounded-2xl border border-stone-200 bg-white p-5 text-base leading-7 text-slate-950">Looking for Azagro 10,000 ppm? <Link href={productHref(additionalProduct)} className="font-bold underline underline-offset-4">View its product information and technical sheet.</Link></p>
         </div>
-      </section>
+      </div>
       <SpecialtyPortfolio showPortfolioLink={false} />
       <section className="bg-slate-950 py-16 text-white">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
