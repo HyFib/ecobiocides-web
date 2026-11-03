@@ -15,7 +15,7 @@ export const AZAGRO_RANGE = [
   {
     ppm: "300 PPM",
     active: "0.03% Azadirachtin",
-    bottle: "/media/products/azagro-300-bottle.webp",
+    bottle: "/media/cutouts/azagro-300-ppm.png",
     family: "/media/products/azagro-300-family.webp",
     sheet: "/resources/technical-data-sheets/azagro-300-ppm.docx",
     foliar: "2.5–3 L / acre",
@@ -25,7 +25,7 @@ export const AZAGRO_RANGE = [
   {
     ppm: "1500 PPM",
     active: "0.15% Azadirachtin",
-    bottle: "/media/products/azagro-1500-bottle.webp",
+    bottle: "/media/cutouts/azagro-1500-ppm.png",
     family: "/media/products/azagro-1500-family.webp",
     sheet: "/resources/technical-data-sheets/azagro-1500-ppm.docx",
     foliar: "0.75–1.5 L / acre",
@@ -35,7 +35,7 @@ export const AZAGRO_RANGE = [
   {
     ppm: "3000 PPM",
     active: "0.30% Azadirachtin",
-    bottle: "/media/products/azagro-3000-bottle.webp",
+    bottle: "/media/cutouts/azagro-3000-ppm.png",
     family: "/media/products/azagro-3000-family.webp",
     sheet: "/resources/technical-data-sheets/azagro-3000-ppm.docx",
     foliar: "0.75–1.5 L / acre",
@@ -45,7 +45,7 @@ export const AZAGRO_RANGE = [
   {
     ppm: "10000 PPM",
     active: "1% Azadirachtin",
-    bottle: "/media/products/azagro-10000-bottle.webp",
+    bottle: "/media/cutouts/azagro-10000-ppm.png",
     family: "/media/products/azagro-10000-family-light.webp",
     alternateFamily: "/media/products/azagro-10000-family-storm.webp",
     sheet: "/resources/technical-data-sheets/azagro-10000-ppm.docx",
@@ -56,7 +56,7 @@ export const AZAGRO_RANGE = [
   {
     ppm: "30000 PPM",
     active: "3% Azadirachtin",
-    bottle: "/media/products/azagro-30000-bottle.webp",
+    bottle: "/media/cutouts/azagro-30000-ppm.png",
     family: "/media/products/azagro-30000-family.webp",
     sheet: "/resources/technical-data-sheets/azagro-30000-ppm.docx",
     foliar: "0.20–0.70 L / acre",
@@ -66,7 +66,7 @@ export const AZAGRO_RANGE = [
   {
     ppm: "50000 PPM",
     active: "5% Azadirachtin",
-    bottle: "/media/products/azagro-50000-bottle.webp",
+    bottle: "/media/cutouts/azagro-50000-ppm.png",
     family: "/media/products/azagro-50000-family.webp",
     sheet: "/resources/technical-data-sheets/azagro-50000-ppm.docx",
     foliar: "0.10–0.15 L / acre",

@@ -43,9 +43,41 @@ html {
 }
 
 body {
-  background: #ffffff;
-  color: #0f172a;
+  background: #f5f3ea;
+  color: #173f35;
   text-rendering: optimizeLegibility;
+}
+
+.site-container {
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: clamp(1.5rem, 4.5vw, 4rem);
+}
+
+.section-title {
+  color: #173f35;
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.botanical-button {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  border-radius: 999px;
+  padding: .95rem 1.65rem;
+  font-size: .875rem;
+  font-weight: 600;
+  transition: background-color .2s, color .2s;
+}
+
+section[id] {
+  scroll-margin-top: 6rem;
 }
 
 button,
@@ -104,8 +136,8 @@ video {
 
 /* Selection */
 ::selection {
-  background-color: #e2e8f0;
-  color: #0f172a;
+  background-color: #d5e6a5;
+  color: #173f35;
 }
 
 /* Focus outline for accessibility */

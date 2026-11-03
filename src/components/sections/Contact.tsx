@@ -12,7 +12,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { COMPANY } from "@/lib/constants";
-import SectionHeading from "@/components/ui/SectionHeading";
 
 interface FormData {
   name: string;
@@ -113,19 +112,18 @@ export default function Contact() {
   const whatsappUrl = `https://wa.me/${COMPANY.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello! I'd like to inquire about your products.")}`;
 
   return (
-    <section id="contact" className="section-padding relative bg-white overflow-hidden">
+    <section id="contact" className="relative overflow-hidden bg-[#fcfcf8] py-20 sm:py-24">
       {/* Subtle background accents */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute right-0 top-0 h-[400px] w-[400px] rounded-full bg-stone-50/40 blur-3xl" />
         <div className="absolute left-0 bottom-0 h-[300px] w-[300px] rounded-full bg-stone-50/30 blur-3xl" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Contact Us"
-          title="Let's Work Together"
-          subtitle="Whether you need a product quote, technical consultation, or custom formulation — our team is ready to help."
-        />
+      <div className="site-container">
+        <div className="mb-12 grid items-end gap-6 lg:grid-cols-2">
+          <div><p className="eyebrow text-[#647458]">Let’s grow together</p><h2 className="section-title mt-4">Your next season.<br />Our shared purpose.</h2></div>
+          <p className="max-w-lg text-base leading-7 text-[#687267]">Tell us about your crop, formulation or supply requirements. Our team is here to help you find your next step.</p>
+        </div>
 
         <div className="grid gap-12 lg:grid-cols-5">
           {/* Contact Info */}
@@ -138,7 +136,7 @@ export default function Contact() {
           >
             <div className="space-y-6">
               {/* Key contacts */}
-              <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-6 backdrop-blur-sm">
+              <div className="rounded-2xl border border-gray-100 bg-[#f5f3ea] p-6 backdrop-blur-sm">
                 <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">
                   Key Contacts
                 </h3>
@@ -148,7 +146,7 @@ export default function Contact() {
                     <p className="text-xs text-gray-500">Managing Director</p>
                     <a
                       href="tel:+919443352020"
-                      className="mt-1 flex items-center gap-2 text-sm text-eco-600 hover:text-slate-600"
+                      className="mt-1 flex items-center gap-2 text-sm text-[#446450] hover:text-slate-600"
                     >
                       <Phone className="h-3.5 w-3.5" />
                       +91 9443352020
@@ -163,7 +161,7 @@ export default function Contact() {
                     </p>
                     <a
                       href="tel:+919443342020"
-                      className="mt-1 flex items-center gap-2 text-sm text-eco-600 hover:text-slate-600"
+                      className="mt-1 flex items-center gap-2 text-sm text-[#446450] hover:text-slate-600"
                     >
                       <Phone className="h-3.5 w-3.5" />
                       +91 9443342020
@@ -175,7 +173,7 @@ export default function Contact() {
               {/* Info cards */}
               <div className="space-y-3">
                 <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-stone-50 text-eco-600">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-stone-50 text-[#446450]">
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
@@ -192,7 +190,7 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-stone-50 text-eco-600">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-stone-50 text-[#446450]">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
@@ -201,7 +199,7 @@ export default function Contact() {
                     </p>
                     <a
                       href={`mailto:${COMPANY.emails[0]}`}
-                      className="mt-1 block text-sm text-eco-600 hover:text-slate-600"
+                      className="mt-1 block text-sm text-[#446450] hover:text-slate-600"
                     >
                       {COMPANY.emails[0]}
                     </a>
@@ -209,7 +207,7 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-stone-50 text-eco-600">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-stone-50 text-[#446450]">
                     <Clock className="h-5 w-5" />
                   </div>
                   <div>
@@ -249,8 +247,8 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-3"
           >
-            <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-200/50">
-              <div className="bg-gradient-to-r from-slate-600 via-slate-600 to-slate-700 p-6">
+            <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+              <div className="bg-[#173f35] p-6">
                 <h3 className="text-lg font-bold text-white">
                   Request a Quote
                 </h3>
@@ -262,7 +260,7 @@ export default function Contact() {
               {isSubmitted ? (
                 <div className="flex flex-col items-center justify-center p-12 text-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-stone-50">
-                    <CheckCircle2 className="h-8 w-8 text-eco-600" />
+                    <CheckCircle2 className="h-8 w-8 text-[#446450]" />
                   </div>
                   <h4 className="mt-4 text-xl font-bold text-gray-900">
                     Complete your enquiry in your email app
@@ -428,7 +426,7 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-slate-600 to-slate-700 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-eco-600/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-eco-600/35 sm:w-auto"
+                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#173f35] px-8 py-3.5 text-base font-semibold text-white  transition-all hover:-translate-y-0.5 hover:bg-[#2e5847] sm:w-auto"
                   >
                     <Send className="h-4 w-4" />
                     Prepare Email Enquiry

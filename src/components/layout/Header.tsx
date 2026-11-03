@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone } from "lucide-react";
-import { NAV_LINKS, COMPANY } from "@/lib/constants";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { NAV_LINKS } from "@/lib/constants";
 import ProductNavigation from "@/components/layout/ProductNavigation";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -15,167 +15,93 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
   const pathname = usePathname();
+  const mobileMenuId = useId();
+  const mobileToggle = useRef<HTMLButtonElement>(null);
   const isMobileMenuOpen = mobileMenuPath === pathname;
-  // Close only after navigation commits, and keep the menu closed on Back.
+  const inverse = pathname === "/" && !isScrolled && !isMobileMenuOpen;
+
+  // Keep the menu available until navigation commits; Back starts closed.
   if (mobileMenuPath !== null && mobileMenuPath !== pathname) setMobileMenuPath(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    if (href.startsWith("/#")) return false;
-    return pathname.startsWith(href);
-  };
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuPath(null);
+        mobileToggle.current?.focus();
+      }
+    };
+    const breakpoint = window.matchMedia("(min-width: 1024px)");
+    const closeAtBreakpoint = () => setMobileMenuPath(null);
+    document.addEventListener("keydown", handleEscape);
+    breakpoint.addEventListener("change", closeAtBreakpoint);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      breakpoint.removeEventListener("change", closeAtBreakpoint);
+    };
+  }, [isMobileMenuOpen]);
+
+  const isActive = (href: string) => href === "/" ? pathname === "/" : !href.startsWith("/#") && pathname.startsWith(href);
 
   return (
-    <header
-      className={`glass-premium fixed left-0 right-0 top-0 z-50 border-b border-white/60 transition-all duration-500 ${
-        isScrolled ? "shadow-lg shadow-black/[0.05]" : "shadow-sm shadow-black/[0.02]"
-      }`}
-    >
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-18 items-center justify-between md:h-20 lg:h-22">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Link
-              href="/"
-              className="flex shrink-0 items-center gap-3"
-            >
-              <div className="relative h-11 w-11 shrink-0 overflow-hidden sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16">
-                <Image
-                  src={`${basePath}/ecobiosides-logo.png`}
-                  alt="Ecobiocides & Botanicals Pvt Ltd"
-                  fill
-                  className="object-cover object-left"
-                  sizes="(max-width: 640px) 44px, (max-width: 768px) 48px, (max-width: 1024px) 56px, 64px"
-                  priority
-                />
-              </div>
-              <div className="hidden min-[520px]:block">
-                <p className="text-sm font-bold leading-tight tracking-tight text-gray-900 sm:text-base lg:text-lg">
-                  Ecobiocides <span className="text-eco-600">&</span> Botanicals
-                </p>
-                <p className="text-[10px] font-medium uppercase tracking-widest text-gray-500 sm:text-[11px] lg:text-xs">
-                  Pvt Ltd
-                </p>
-              </div>
-            </Link>
-          </motion.div>
+    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,color] duration-300 ${inverse ? "bg-transparent text-white" : "bg-[#f9faf6]/95 text-[#173f35] shadow-[0_1px_0_rgba(23,63,53,0.1)] backdrop-blur-xl"}`}>
+      <nav aria-label="Main navigation" className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+        <div className="flex h-20 items-center justify-between gap-4 lg:h-24">
+          <Link href="/" aria-label="Ecobiocides & Botanicals home" className="flex shrink-0 items-center gap-2.5 sm:gap-3">
+            <span className="relative block h-11 w-11 shrink-0 overflow-hidden rounded-full bg-white sm:h-12 sm:w-12">
+              <Image src={`${basePath}/ecobiosides-logo.png`} alt="" fill priority sizes="48px" className="scale-[1.5] object-cover object-center" />
+            </span>
+            <span className="block">
+              <span className="block text-[15px] font-semibold leading-tight tracking-[-0.04em] sm:text-lg">Ecobiocides</span>
+              <span className={`mt-0.5 block text-[9px] font-medium uppercase tracking-[0.15em] sm:text-[10px] ${inverse ? "text-white/80" : "text-[#173f35]/75"}`}>&amp; Botanicals Pvt Ltd</span>
+            </span>
+          </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden items-center gap-1 lg:flex">
-            {NAV_LINKS.map((link) => {
-              const active = isActive(link.href);
-              if (link.href === "/products") return <ProductNavigation key={`${link.href}:${pathname}`} active={active} />;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-300 ${
-                    active
-                      ? "text-slate-600"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {link.label}
-                  {active && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 -z-10 rounded-lg bg-stone-50"
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
+            {NAV_LINKS.map((link) => link.href === "/products" ? (
+              <ProductNavigation key={`${link.href}:${pathname}`} active={isActive(link.href)} inverse={inverse} />
+            ) : (
+              <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? "page" : undefined} className={`rounded-full px-3 py-2.5 text-[13px] font-medium transition-colors ${inverse ? "text-white/90 hover:bg-white/10 hover:text-white" : "text-[#173f35]/80 hover:bg-[#173f35]/5 hover:text-[#173f35]"} ${isActive(link.href) ? inverse ? "bg-white/10 text-white" : "bg-[#173f35]/5 text-[#173f35]" : ""}`}>{link.label}</Link>
+            ))}
           </div>
 
-          {/* CTA + Mobile Toggle */}
-          <div className="flex items-center gap-3">
-            <a
-              href={`tel:${COMPANY.phones[0]}`}
-              className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-slate-600 to-slate-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-eco-600/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-eco-600/35 sm:flex"
-            >
-              <Phone className="h-4 w-4" />
-              Get Quote
-            </a>
-
-            <button
-              onClick={() => setMobileMenuPath(isMobileMenuOpen ? null : pathname)}
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 transition-colors hover:bg-gray-100 lg:hidden"
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isMobileMenuOpen}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/#contact" className={`hidden min-h-11 items-center justify-center gap-4 rounded-full px-5 text-sm font-semibold transition-colors sm:inline-flex ${inverse ? "bg-[#d5e6a5] text-[#173f35] hover:bg-white" : "bg-[#173f35] text-white hover:bg-[#245b4b]"}`}>Let’s talk<ArrowUpRight aria-hidden="true" className="h-4 w-4" /></Link>
+            <button ref={mobileToggle} type="button" onClick={() => setMobileMenuPath(isMobileMenuOpen ? null : pathname)} aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={isMobileMenuOpen} aria-controls={mobileMenuId} className={`flex h-11 w-11 items-center justify-center rounded-full border transition-colors lg:hidden ${inverse ? "border-white/30 text-white hover:bg-white/10" : "border-[#173f35]/20 text-[#173f35] hover:bg-[#173f35]/5"}`}>
+              {isMobileMenuOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      <div id={mobileMenuId}>
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-gray-200/50 lg:hidden"
-          >
-            <div className="max-h-[calc(100dvh-5rem)] space-y-1 overflow-y-auto bg-white px-4 pb-6 pt-4">
-              {NAV_LINKS.map((link, i) => link.href === "/products" ? (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden border-t border-[#173f35]/10 bg-[#f9faf6] lg:hidden">
+            <div className="max-h-[calc(100dvh-5rem)] space-y-1 overflow-y-auto px-5 pb-6 pt-4 sm:px-8" onClick={(event) => {
+              const link = event.target instanceof Element ? event.target.closest("a") : null;
+              if (!link) return;
+              const destination = new URL(link.href, window.location.href);
+              if (destination.origin === window.location.origin && destination.pathname.replace(/\/$/, "") === window.location.pathname.replace(/\/$/, "")) setMobileMenuPath(null);
+            }}>
+              {NAV_LINKS.map((link) => link.href === "/products" ? (
                 <ProductNavigation key={`${link.href}:${pathname}`} mobile active={isActive(link.href)} />
               ) : (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <Link
-                    href={link.href}
-                    onClick={() => setMobileMenuPath(null)}
-                    className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors ${
-                      isActive(link.href)
-                        ? "bg-stone-50 text-slate-600"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
+                <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? "page" : undefined} className={`block min-h-12 rounded-xl px-4 py-3 text-base font-medium ${isActive(link.href) ? "bg-[#173f35]/5 text-[#173f35]" : "text-[#173f35]/80 hover:bg-[#173f35]/5"}`}>{link.label}</Link>
               ))}
-              <div className="pt-4">
-                <a
-                  href={`tel:${COMPANY.phones[0]}`}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-slate-600 to-slate-700 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-eco-600/25"
-                >
-                  <Phone className="h-4 w-4" />
-                  Get Quote
-                </a>
-              </div>
+              <div className="pt-4"><Link href="/#contact" className="flex min-h-12 w-full items-center justify-between rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white">Let’s talk<ArrowUpRight aria-hidden="true" className="h-4 w-4" /></Link></div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </header>
   );
 }

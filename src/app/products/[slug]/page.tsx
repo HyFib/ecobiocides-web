@@ -1,13 +1,13 @@
 import { siteUrl } from "@/lib/site";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, Leaf, MessageCircle } from "lucide-react";
+import { ArrowLeft, Download, MessageCircle } from "lucide-react";
 import { COMPANY } from "@/lib/constants";
 import { mediaUrl } from "@/lib/media";
 import { CATALOG_PRODUCTS, CURRENT_PRODUCTS, getCategory, getProduct, productHref } from "@/lib/products";
 import CatalogProductCard from "@/components/ui/CatalogProductCard";
+import ProductImage from "@/components/ui/ProductImage";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -39,11 +39,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <li aria-current="page" className="font-semibold text-slate-900">{product.name}</li>
         </ol></nav>
         <div className="grid min-w-0 gap-10 lg:grid-cols-2 lg:items-start">
-          {product.image ? (
-            <figure className="overflow-hidden rounded-3xl bg-stone-50/60"><div className="relative aspect-[4/3]"><Image src={mediaUrl(product.image)} alt={product.imageAlt ?? product.name} fill priority className="object-contain p-6" sizes="(max-width: 1024px) 100vw, 50vw" /></div>{product.imageCaption && <figcaption className="px-6 pb-6 text-sm leading-6 text-slate-600">{product.imageCaption}</figcaption>}</figure>
-          ) : (
-            <div className="flex aspect-[4/3] flex-col items-center justify-center gap-5 rounded-3xl bg-slate-950 p-8 text-center text-amber-200" aria-hidden="true"><Leaf className="h-12 w-12" /><span className="font-display text-4xl font-bold">{product.name}</span></div>
-          )}
+          <figure className="overflow-hidden rounded-3xl border border-[#e2e6dc] bg-white"><ProductImage product={product} priority sizes="(max-width: 1024px) 100vw, 50vw" />{product.imageCaption && <figcaption className="px-6 pb-6 text-sm leading-6 text-slate-600">{product.imageCaption}</figcaption>}</figure>
           <div className="min-w-0">
             <p className="text-sm font-bold uppercase tracking-widest text-slate-600">{category.name}</p>
             <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight text-slate-950 sm:text-5xl">{product.name}</h1>
@@ -58,7 +54,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <Link href={`/products/#${category.id}`} className="mt-8 inline-flex min-h-11 items-center gap-2 text-base font-semibold text-slate-800"><ArrowLeft className="h-4 w-4" />Back to products</Link>
           </div>
         </div>
-        {product.slug === "azavigr" && <section className="mt-12 rounded-3xl border border-stone-100 p-6 sm:p-8"><h2 className="text-2xl font-bold text-slate-950">Azavigr variants</h2><div className="mt-6 grid gap-6 sm:grid-cols-2">{[{name:"Azavigr 0.15%",image:"/media/specialty/azavigr-015.webp"},{name:"Azavigr 1%",image:"/media/specialty/azavigr-1.webp"}].map((variant) => <figure key={variant.name}><div className="relative aspect-[4/3]"><Image src={mediaUrl(variant.image)} alt={`${variant.name} packaging`} fill className="object-contain" sizes="(max-width: 640px) 100vw, 50vw" /></div><figcaption className="mt-3 text-center text-base font-semibold text-slate-950">{variant.name}</figcaption></figure>)}</div></section>}
+        {product.slug === "azavigr" && <section className="mt-12 rounded-3xl border border-stone-100 p-6 sm:p-8"><h2 className="text-2xl font-bold text-slate-950">Azavigr variants</h2><div className="mt-6 grid gap-6 sm:grid-cols-2">{[{name:"Azavigr 0.15%",image:"/media/cutouts/azavigr-015.png"},{name:"Azavigr 1%",image:"/media/cutouts/azavigr-1.png"}].map((variant) => <figure key={variant.name}><div className="overflow-hidden rounded-2xl border border-[#e2e6dc] bg-white"><ProductImage product={{name:variant.name,image:variant.image,imageAlt:`${variant.name} packaging`}} sizes="(max-width: 640px) 100vw, 50vw" /></div><figcaption className="mt-3 text-center text-base font-semibold text-slate-950">{variant.name}</figcaption></figure>)}</div></section>}
         {related.length > 0 && <section className="mt-16"><h2 className="text-3xl font-bold text-slate-950">More from {category.name}</h2><div className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{related.map((item) => <CatalogProductCard key={item.slug} product={item} />)}</div></section>}
       </div>
     </main>

@@ -1,7 +1,7 @@
 import Hero from "@/components/sections/Hero";
-import TrustBadges from "@/components/sections/TrustBadges";
+import Solutions from "@/components/sections/Solutions";
+import BotanicalApproach from "@/components/sections/BotanicalApproach";
 import ProductShowcase from "@/components/sections/ProductShowcase";
-import IndustriesPreview from "@/components/sections/IndustriesPreview";
 import AboutPreview from "@/components/sections/AboutPreview";
 import CertificationsPreview from "@/components/sections/CertificationsPreview";
 import ProductDirectory from "@/components/sections/ProductDirectory";
@@ -11,10 +11,10 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <TrustBadges />
-      <ProductShowcase />
+      <Solutions />
+      <BotanicalApproach />
+      <ProductShowcase title="Botanical expertise. In every product." description="Explore our Azagro range and specialist botanical inputs. Find the right starting point, then talk to our technical team." />
       <ProductDirectory />
-      <IndustriesPreview />
       <AboutPreview />
       <CertificationsPreview />
       <Contact />

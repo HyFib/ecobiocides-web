@@ -81,7 +81,13 @@ const home = readFileSync(join(root, "index.html"), "utf8");
 assert(!home.includes("Six precise strengths"), "Homepage concentration count is stale");
 const about = readFileSync(join(root, "about/index.html"), "utf8");
 const industries = readFileSync(join(root, "industries/index.html"), "utf8");
-assert(!/See the portfolio from every angle|id="field-stories"|<video\b/.test(home), "Portfolio and four videos must be removed");
+assert(!/See the portfolio from every angle|id="field-stories"/.test(home), "Removed portfolio and field-story gallery must stay removed");
+const homeHero = home.match(/<section id="home"[\s\S]*?<\/section>/)?.[0];
+assert(homeHero?.includes('/media/videos/ecobiocides-botanical-keyframe.png'), "Hero requires the original Ecobiocides botanical visual");
+assert(existsSync(join(root, "media/videos/ecobiocides-botanical-keyframe.png")), "Missing original hero visual");
+assert.equal((home.match(/<video\b/g) || []).length, 0, "The current original-still hero must not load a video");
+assert(!homeHero.includes('aria-controls="hero-background-video"'), "The still hero must not show an inactive video control");
+assert(!/hero-crop-fields|ecobiocides-botanical-film\.mp4|kriya\.ltd\/assets\//i.test(home), "Borrowed or rejected hero media must not be referenced by the homepage");
 assert(!about.includes("Integrated manufacturing campus") && !about.includes("factory-aerial-campus.webp"), "Removed About campus image remains");
 assert(about.includes("Connected production areas") && about.includes("factory-aerial-yard.webp"), "Keep the connected production areas on About");
 const industryHero = industries.match(/<main><section[\s\S]*?<\/section>/)?.[0];
@@ -96,11 +102,40 @@ assert(productShowcase && (productShowcase.match(/<li\b/g) || []).length === 16,
 assert(productShowcase.includes("Next products") && productShowcase.includes("Previous products"), "Product strip requires manual navigation");
 for (const [file, { html }] of documents) {
   assert(!/testimonials|complete visual story/i.test(html), `Removed content remains in ${file}`);
+  assert(!/kriya\.ltd\/assets\//i.test(html), `Borrowed reference media remains in ${file}`);
 }
+const productGroups = [
+  { id: "azagro-ec", slugs: requiredSlugs.filter((slug) => slug.startsWith("azagro-")) },
+  { id: "cold-pressed-neem-oil", slugs: ["cold-pressed-neem-oil"] },
+  { id: "karanja-oil", slugs: ["karanja-oil"] },
+  { id: "neem-activa", slugs: ["neem-activa"] },
+  { id: "karanja-activa", slugs: ["karanja-activa"] },
+  { id: "azavigr", slugs: ["azavigr"] },
+  { id: "biostimulant", slugs: ["nitro-rich"] },
+  { id: "neem-grow-granules", slugs: ["neem-grow-granules"] },
+  { id: "seaweed-gold-max-granules", slugs: ["seaweed-gold-max-granules"] },
+  { id: "neem-karanja-oil-ec", slugs: ["neem-karanja-oil-ec"] },
+  { id: "neem-cake", slugs: ["neem-cake"] },
+  { id: "azadirachtin-technical-powder", slugs: ["azadirachtin-technical-powder"] },
+];
+const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 for (const html of [home, catalog]) {
   assert(html.includes("Browse products &amp; subcategories"), "Missing page product dropdown");
   for (const slug of requiredSlugs) assert(html.includes(`/products/${slug}/`), `Dropdown missing ${slug}`);
-  assert(html.includes('<summary') && html.includes('Biostimulant'), "Missing expandable product categories");
+  assert(html.includes('aria-label="Product categories"'), "Missing product category navigation");
+  const buttons = [...html.matchAll(/<button\b[^>]*>/g)].map(([tag]) => tag);
+  for (const group of productGroups) {
+    const trigger = buttons.find((tag) => attribute(tag, "aria-controls")?.endsWith(`-desktop-${group.id}`));
+    assert(trigger && /\baria-expanded="(?:true|false)"/.test(trigger), `Missing expandable category button: ${group.id}`);
+    const panelId = attribute(trigger, "aria-controls");
+    const panel = html.match(new RegExp(`<section\\b(?=[^>]*\\bid="${escapeRegExp(panelId)}")[^>]*>[\\s\\S]*?<\\/section>`))?.[0];
+    assert(panel?.includes(`aria-labelledby="${attribute(trigger, "id")}"`), `Category button must label its child pane: ${group.id}`);
+    const children = [...panel.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)]
+      .map(([, href]) => href.match(/\/products\/([^/#]+)\//)?.[1]).filter(Boolean);
+    assert.deepEqual([...new Set(children)].sort(), [...group.slugs].sort(), `Wrong child products in category: ${group.id}`);
+    assert(buttons.some((tag) => attribute(tag, "aria-controls")?.endsWith(`-accordion-${group.id}`)), `Missing mobile category button: ${group.id}`);
+  }
 }
 const aboutPreview = home.match(/<section id="about"[\s\S]*?<\/section>/)?.[0];
 assert(aboutPreview && !/<img\b|background-image/.test(aboutPreview), "Home About preview must not have a background image");
@@ -109,9 +144,38 @@ assert(home.includes("https://maps.google.com/maps?q=10.042108,77.492966&amp;z=1
 for (const period of ["2007-08", "2008-09"]) assert(about.includes(`/media/awards/best-entrepreneur-${period}.jpeg`), `About missing award ${period}`);
 for (const copy of ["KARNA OIL MILL", "25 years", "USD 10 million", "Harnessing the Power of Neem"]) assert(about.includes(copy), `About missing source content: ${copy}`);
 for (const copy of ["Our core strengths", "Our people &amp; workforce", "Raw material handling", "From Neem to Innovation"]) assert(industries.includes(copy), `Industries missing source content: ${copy}`);
-for (const slug of ["neem-activa", "karanja-activa", "nitro-rich"]) {
+function productSurfaces(html, label) {
+  const surfaces = [...html.matchAll(/<div\b[^>]*\bdata-product-image\b[^>]*>[\s\S]*?<\/div>/g)].map(([surface]) => surface);
+  assert(surfaces.length > 0, `Missing uniform product image surface: ${label}`);
+  for (const surface of surfaces) {
+    const openingTag = surface.slice(0, surface.indexOf(">") + 1);
+    assert(/\bbg-white\b/.test(openingTag) && openingTag.includes("aspect-[4/5]"), `Product image surface must be white and 4:5: ${label}`);
+    for (const [, src] of surface.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)) {
+      assert(src.startsWith(`${basePath}/media/cutouts/`), `Product photograph must use a background-free cutout: ${label}: ${src}`);
+    }
+  }
+  return surfaces;
+}
+productSurfaces(home, "homepage");
+productSurfaces(catalog, "catalogue");
+const awaitingPhotographs = new Set(["neem-activa", "karanja-activa", "nitro-rich"]);
+for (const slug of requiredSlugs) {
   const html = readFileSync(join(root, "products", slug, "index.html"), "utf8");
-  assert(html.includes("Factory photograph") && html.includes("pack image coming soon"), `Factory fallback must be labelled: ${slug}`);
+  const [primarySurface] = productSurfaces(html, slug);
+  if (awaitingPhotographs.has(slug)) {
+    assert(/pack photograph[\s\S]*?coming soon/i.test(primarySurface), `Missing pack photograph placeholder: ${slug}`);
+    assert(!/<img\b/.test(primarySurface), `Unphotographed product must not use a substitute photograph: ${slug}`);
+    assert(!/Factory photograph|pack image coming soon/i.test(html), `Stale factory-photo disclosure remains: ${slug}`);
+  } else {
+    const filename = slug === "azavigr" ? "azavigr-1" : slug;
+    assert(primarySurface.includes(`/media/cutouts/${filename}.png`), `Wrong primary product cutout: ${slug}`);
+    assert(existsSync(join(root, "media/cutouts", `${filename}.png`)), `Missing product cutout: ${slug}`);
+  }
+}
+const azavigr = readFileSync(join(root, "products/azavigr/index.html"), "utf8");
+for (const [variant, filename] of [["Azavigr 0.15%", "azavigr-015.png"], ["Azavigr 1%", "azavigr-1.png"]]) {
+  assert(azavigr.includes(variant) && azavigr.includes(`/media/cutouts/${filename}`), `Missing photographed Azavigr variant: ${variant}`);
+  assert(existsSync(join(root, "media/cutouts", filename)), `Missing Azavigr cutout: ${filename}`);
 }
 assert.equal(new Set(errors).size, 0, [...new Set(errors)].join("\n"));
 console.log(`Verified ${htmlFiles.length} exported HTML files, ${references} local references, 17 product routes, the product hierarchy, awards, canonical URLs and sitemap.`);
